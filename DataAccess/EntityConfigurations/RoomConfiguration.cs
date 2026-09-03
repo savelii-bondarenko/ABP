@@ -4,6 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DataAccess.EntityConfigurations;
 
+/// <summary>
+/// Database scheme conf. for <see cref="Room"/> entity
+/// </summary>
 sealed class RoomConfiguration : IEntityTypeConfiguration<Room>
 {
     private const short NameMaxLength = 100;

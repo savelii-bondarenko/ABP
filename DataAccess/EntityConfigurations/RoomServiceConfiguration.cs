@@ -4,6 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DataAccess.EntityConfigurations;
 
+/// <summary>
+/// Database scheme conf. for <see cref="RoomService"/> entity
+/// </summary>
 sealed class RoomServiceConfiguration : IEntityTypeConfiguration<RoomService>
 {
     private const string MoneyType = "decimal(18,2)";

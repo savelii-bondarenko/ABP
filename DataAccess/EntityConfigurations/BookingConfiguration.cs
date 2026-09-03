@@ -4,6 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DataAccess.EntityConfigurations;
 
+/// <summary>
+/// Database scheme conf. for <see cref="Booking"/> entity
+/// </summary>
 sealed class BookingConfiguration : IEntityTypeConfiguration<Booking>
 {
     private const string TableName = "BookingSelectedServices";
