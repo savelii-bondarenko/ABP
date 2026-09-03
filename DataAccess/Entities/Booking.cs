@@ -2,7 +2,7 @@
 
 sealed class Booking
 {
-    public required int Id { get; set; }
+    public int Id { get; set; }
 
     public required int RoomId { get; set; }
 
@@ -13,4 +13,6 @@ sealed class Booking
     public required decimal TotalPrice { get; set; }
 
     public Room Room { get; set; } = null!;
+
+    public IList<RoomService> SelectedServices { get; set; } = [];
 }

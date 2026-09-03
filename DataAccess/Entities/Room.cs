@@ -2,15 +2,15 @@
 
 sealed class Room
 {
-    public required int Id { get; set;  }
+    public int Id { get; set;  }
 
     public required string Name { get; set; }
 
     public required int Capacity { get; set; }
 
-    public required decimal Rent { get; set; }
+    public required decimal BasePricePerHour { get; set; }
 
-    public IList<RoomService> RoomServices { get; set; } = [];
+    public IList<RoomService> AvailableServices { get; set; } = [];
 
     public IList<Booking> Bookings { get; set; } = [];
 }
