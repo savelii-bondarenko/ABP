@@ -1,7 +1,6 @@
-﻿namespace Business_Logic
-{
-    public class Class1
-    {
+﻿namespace Business_Logic;
 
-    }
+public class Class1
+{
+
 }
