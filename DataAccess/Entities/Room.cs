@@ -8,7 +8,9 @@ sealed class Room
 
     public required int Capacity { get; set; }
 
-    public required float Rent { get; set; }
+    public required decimal Rent { get; set; }
 
-    public List<RoomService> RoomServices = [];
+    public IList<RoomService> RoomServices { get; set; } = [];
+
+    public IList<Booking> Bookings { get; set; } = [];
 }

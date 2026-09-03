@@ -10,5 +10,7 @@ sealed class Booking
 
     public required DateTime EndTime { get; set; }
 
-    public required float TotalPrice { get; set; }
+    public required decimal TotalPrice { get; set; }
+
+    public Room Room { get; set; } = null!;
 }
