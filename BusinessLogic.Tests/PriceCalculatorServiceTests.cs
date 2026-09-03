@@ -1,9 +1,11 @@
-﻿namespace BusinessLogic.Tests;
+﻿using BusinessLogic.Services;
+
+namespace BusinessLogic.Tests;
 
 public class PriceCalculatorServiceTests
 {
     [Fact]
-    public void CalculatePrice_StandartHurs_ReturnsBestPrice()
+    public void CalculatePrice_StandardHours_ReturnsBasePrice()
     {
         // Arrange
         var calculator = new PriceCalculatorService();
