@@ -1,5 +1,6 @@
 <Solution>
   <Project Path="Business Logic/Business Logic.csproj" />
+  <Project Path="BusinessLogic.Tests/BusinessLogic.Tests.csproj" Id="2923efc9-cf44-4e4a-a043-13a6d15b73c8" />
   <Project Path="Controllers/Controllers.csproj" />
   <Project Path="DataAccess/DataAccess.csproj" />
 </Solution>
