@@ -7,7 +7,7 @@ namespace DataAccess.EntityConfigurations;
 /// <summary>
 /// Database scheme conf. for <see cref="Room"/> entity
 /// </summary>
-sealed class RoomConfiguration : IEntityTypeConfiguration<Room>
+internal sealed class RoomConfiguration : IEntityTypeConfiguration<Room>
 {
     private const short NameMaxLength = 100;
     private const string MoneyType = "decimal(18,2)";

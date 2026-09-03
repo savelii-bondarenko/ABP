@@ -7,7 +7,7 @@ namespace DataAccess.EntityConfigurations;
 /// <summary>
 /// Database scheme conf. for <see cref="Booking"/> entity
 /// </summary>
-sealed class BookingConfiguration : IEntityTypeConfiguration<Booking>
+public sealed class BookingConfiguration : IEntityTypeConfiguration<Booking>
 {
     private const string TableName = "BookingSelectedServices";
     private const string MoneyType = "decimal(18,2)";

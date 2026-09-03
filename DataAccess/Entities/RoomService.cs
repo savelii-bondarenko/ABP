@@ -1,6 +1,6 @@
 ﻿namespace DataAccess.Entities;
 
-sealed class RoomService
+public sealed class RoomService
 {
     public int Id { get; set; }
 

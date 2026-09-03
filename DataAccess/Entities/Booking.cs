@@ -1,6 +1,6 @@
 ﻿namespace DataAccess.Entities;
 
-sealed class Booking
+public sealed class Booking
 {
     public int Id { get; set; }
 
