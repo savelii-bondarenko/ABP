@@ -1,4 +1,25 @@
+using DataAccess;
+using Microsoft.EntityFrameworkCore;
+using Npgsql;
+
 var builder = WebApplication.CreateBuilder(args);
+
+var dbConfig = builder.Configuration.GetSection("DatabaseConfig");
+var connectionStringBuilder = new NpgsqlConnectionStringBuilder
+{
+    Host = dbConfig["Host"],
+    Port = int.Parse(dbConfig["Port"] ?? "5432"),
+    Database = dbConfig["Database"],
+    Username = dbConfig["Username"],
+
+    // Inside real project we can use Secrets or Azure Key
+    Password = "0000"
+};
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    options.UseNpgsql(connectionStringBuilder.ConnectionString);
+});
 
 builder.Services.AddOpenApi();
 
