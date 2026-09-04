@@ -1,6 +1,7 @@
 using BusinessLogic.Interfaces;
 using BusinessLogic.Mappings;
 using BusinessLogic.Services;
+using Controllers.Endpoints;
 using DataAccess;
 using DataAccess.Interfaces;
 using DataAccess.Repository;
@@ -35,15 +36,31 @@ builder.Services.AddAutoMapper(config =>
 
 builder.Services.AddOpenApi();
 
+// Repo
 builder.Services.AddScoped<IRoomRepository, RoomRepository>();
-builder.Services.AddScoped<IRoomService, RoomService>();
-builder.Services.AddScoped<IPriceCalculatorService, PriceCalculatorService>();
-builder.Services.AddScoped<IAdditionalServiceService, AdditionalServiceService>();
-
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 builder.Services.AddScoped<IAdditionalServiceRepository, AdditionalServiceRepository>();
 
-builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+// Services
+builder.Services.AddScoped<IRoomService, RoomService>();
 builder.Services.AddScoped<IBookingService, BookingService>();
+builder.Services.AddScoped<IAdditionalServiceService, AdditionalServiceService>();
+builder.Services.AddScoped<IPriceCalculatorService, PriceCalculatorService>();
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+app.MapAdditionalServiceEndpoints();
+app.MapRoomEndpoints();
+app.MapBookingEndpoints();
 
 app.Run();
