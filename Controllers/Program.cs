@@ -29,6 +29,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddAutoMapper(config =>
 {
     config.AddProfile<RoomProfile>();
+    config.AddProfile<BookingProfile>();
+    config.AddProfile<AdditionalServiceProfile>();
 });
 
 builder.Services.AddOpenApi();
