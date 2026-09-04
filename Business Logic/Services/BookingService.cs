@@ -1,39 +1,71 @@
 ﻿using AutoMapper;
 using BusinessLogic.DTOs;
 using BusinessLogic.Interfaces;
+using DataAccess.Entities;
 using DataAccess.Interfaces;
 
 namespace BusinessLogic.Services;
 
+/// <summary>
+/// Provides business logic operations for managing bookings.
+/// </summary>
+/// <param name="repository">The booking repository for data access.</param>
+/// <param name="mapper">The AutoMapper instance for object mapping.</param>
 public class BookingService(IBookingRepository repository, IMapper mapper) : IBookingService
 {
-    public Task<ResponseBookingDto> AddAsync(CreateBookingeDto createBooking)
+    /// <inheritdoc/>
+    public async Task<ResponseBookingDto> AddAsync(CreateBookingDto createBooking)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(createBooking);
+
+        Booking booking = mapper.Map<Booking>(createBooking);
+        var result = await repository.AddAsync(booking);
+
+        return mapper.Map<ResponseBookingDto>(result);
     }
 
-    public Task DeleteAsync(int id)
+    /// <inheritdoc/>
+    public async Task DeleteAsync(int id)
     {
-        throw new NotImplementedException();
+        await repository.DeleteAsync(id);
     }
 
-    public Task<IEnumerable<ResponseBookingDto>> GetAllAsync()
+    /// <inheritdoc/>
+    public async Task<IEnumerable<ResponseBookingDto>> GetAllAsync()
     {
-        throw new NotImplementedException();
+        var bookings = await repository.GetAllAsync();
+
+        return mapper.Map<IEnumerable<ResponseBookingDto>>(bookings);
     }
 
-    public Task<ResponseBookingDto?> GetByIdAsync(int id)
+    /// <inheritdoc/>
+    public async Task<ResponseBookingDto?> GetByIdAsync(int id)
     {
-        throw new NotImplementedException();
+        var booking = await repository.GetByIdAsync(id);
+
+        if (booking is null)
+        {
+            return null;
+        }
+
+        return mapper.Map<ResponseBookingDto>(booking);
     }
 
-    public Task<IEnumerable<ResponseBookingDto>> GetOverlappingBookingsAsync(int roomId, DateTime start, DateTime end)
+    /// <inheritdoc/>
+    public async Task<IEnumerable<ResponseBookingDto>> GetOverlappingBookingsAsync(int roomId, DateTime start, DateTime end)
     {
-        throw new NotImplementedException();
+        var bookings = await repository.GetOverlappingBookingsAsync(roomId, start, end);
+
+        return mapper.Map<IEnumerable<ResponseBookingDto>>(bookings);
     }
 
-    public Task UpdateAsync(UpdateBookingDto updateBooking)
+    /// <inheritdoc/>
+    public async Task UpdateAsync(UpdateBookingDto updateBooking)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(updateBooking);
+
+        Booking booking = mapper.Map<Booking>(updateBooking);
+
+        await repository.UpdateAsync(booking);
     }
 }

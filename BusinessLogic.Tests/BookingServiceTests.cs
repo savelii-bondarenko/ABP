@@ -28,7 +28,7 @@ public class BookingServiceTests
         var startTime = new DateTime(2026, 10, 1, 10, 0, 0);
         var endTime = new DateTime(2026, 10, 1, 12, 0, 0);
 
-        var createDto = new CreateBookingeDto(1, startTime, endTime, 4000m);
+        var createDto = new CreateBookingDto(1, startTime, endTime, 4000m);
         var bookingEntity = new Booking { Id = 0, RoomId = 1, StartTime = startTime, EndTime = endTime, TotalPrice = 4000m };
         var createdBooking = new Booking { Id = 1, RoomId = 1, StartTime = startTime, EndTime = endTime, TotalPrice = 4000m };
         var expectedDto = new ResponseBookingDto(1, 1, startTime, endTime, 4000m);
@@ -129,7 +129,7 @@ public class BookingServiceTests
         var startTime = new DateTime(2026, 10, 1, 10, 0, 0);
         var endTime = new DateTime(2026, 10, 1, 12, 0, 0);
 
-        var updateDto = new UpdateBookingDto(1, startTime, endTime, 5000m);
+        var updateDto = new UpdateBookingDto(1, 1, startTime, endTime, 5000m);
         var bookingEntity = new Booking { Id = 1, RoomId = 1, StartTime = startTime, EndTime = endTime, TotalPrice = 5000m };
 
         _mockMapper.Setup(m => m.Map<Booking>(updateDto)).Returns(bookingEntity);

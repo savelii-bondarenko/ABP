@@ -8,7 +8,7 @@ public record BookingDto(
     decimal TotalPrice
 );
 
-public record CreateBookingeDto(
+public record CreateBookingDto(
     int RoomId,
     DateTime StartTime,
     DateTime EndTime,
@@ -16,6 +16,7 @@ public record CreateBookingeDto(
 );
 
 public record UpdateBookingDto(
+    int Id,
     int RoomId,
     DateTime StartTime,
     DateTime EndTime,
