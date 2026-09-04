@@ -1,13 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BusinessLogic.DTOs;
-using BusinessLogic.Services;
+﻿using BusinessLogic.DTOs;
 using DataAccess.Entities;
 using DataAccess.Interfaces;
 using AutoMapper;
 using Moq;
-using Xunit;
 
 namespace BusinessLogic.Tests;
 
