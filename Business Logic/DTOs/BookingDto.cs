@@ -12,7 +12,7 @@ public record CreateBookingDto(
     int RoomId,
     DateTime StartTime,
     DateTime EndTime,
-    decimal TotalPrice
+    List<int> AdditionalServiceIds
 );
 
 public record UpdateBookingDto(

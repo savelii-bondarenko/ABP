@@ -35,7 +35,13 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddScoped<IRoomRepository, RoomRepository>();
 builder.Services.AddScoped<IRoomService, RoomService>();
+builder.Services.AddScoped<IPriceCalculatorService, PriceCalculatorService>();
+builder.Services.AddScoped<IAdditionalServiceService, AdditionalServiceService>();
 
+builder.Services.AddScoped<IAdditionalServiceRepository, AdditionalServiceRepository>();
+
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+builder.Services.AddScoped<IBookingService, BookingService>();
 var app = builder.Build();
 
 app.Run();

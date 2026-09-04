@@ -7,7 +7,7 @@ namespace DataAccess.EntityConfigurations;
 /// <summary>
 /// Database scheme conf. for <see cref="AdditionalService"/> entity
 /// </summary>
-internal sealed class RoomServiceConfiguration : IEntityTypeConfiguration<AdditionalService>
+internal sealed class AdditionalServiceConfiguration : IEntityTypeConfiguration<AdditionalService>
 {
     private const string MoneyType = "decimal(18,2)";
 

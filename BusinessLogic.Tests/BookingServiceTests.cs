@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BusinessLogic.DTOs;
+using BusinessLogic.Interfaces;
 using BusinessLogic.Services;
 using DataAccess.Entities;
 using DataAccess.Interfaces;
@@ -9,16 +10,51 @@ namespace BusinessLogic.Tests;
 
 public class BookingServiceTests
 {
-    private readonly Mock<IBookingRepository> _mockRepo;
+    private readonly Mock<IBookingRepository> _mockBookingRepo;
+    private readonly Mock<IRoomRepository> _mockRoomRepo;
+    private readonly Mock<IAdditionalServiceRepository> _mockAddServiceRepo;
     private readonly Mock<IMapper> _mockMapper;
+    private readonly Mock<IPriceCalculatorService> _mockCalculator;
     private readonly BookingService _bookingService;
 
     public BookingServiceTests()
     {
-        _mockRepo = new Mock<IBookingRepository>();
+        _mockBookingRepo = new Mock<IBookingRepository>();
+        _mockRoomRepo = new Mock<IRoomRepository>();
+        _mockAddServiceRepo = new Mock<IAdditionalServiceRepository>();
         _mockMapper = new Mock<IMapper>();
+        _mockCalculator = new Mock<IPriceCalculatorService>();
 
-        _bookingService = new BookingService(_mockRepo.Object, _mockMapper.Object);
+        _bookingService = new BookingService(
+            _mockBookingRepo.Object,
+            _mockRoomRepo.Object,
+            _mockAddServiceRepo.Object,
+            _mockMapper.Object,
+            _mockCalculator.Object
+        );
+    }
+
+    [Fact]
+    public async Task AddAsync_WhenRoomAlreadyBooked_ThrowsInvalidOperationException()
+    {
+        // Arrange
+        var dto = new CreateBookingDto(1, DateTime.Now, DateTime.Now.AddHours(2), new List<int>());
+
+        _mockBookingRepo.Setup(repo => repo.GetOverlappingBookingsAsync(dto.RoomId, dto.StartTime, dto.EndTime))
+                        .ReturnsAsync(new List<Booking>
+                        {
+                        new Booking
+                        {
+                            RoomId = dto.RoomId,
+                            StartTime = dto.StartTime,
+                            EndTime = dto.EndTime,
+                            TotalPrice = 0m
+                        }
+                        });
+
+        // Act & Assert
+        var exception = await Assert.ThrowsAsync<InvalidOperationException>(() => _bookingService.AddAsync(dto));
+        Assert.Equal("The room is already booked for the selected time period.", exception.Message);
     }
 
     [Fact]
@@ -28,13 +64,23 @@ public class BookingServiceTests
         var startTime = new DateTime(2026, 10, 1, 10, 0, 0);
         var endTime = new DateTime(2026, 10, 1, 12, 0, 0);
 
-        var createDto = new CreateBookingDto(1, startTime, endTime, 4000m);
+        var createDto = new CreateBookingDto(1, startTime, endTime, new List<int>());
+        var expectedRoom = new Room { Id = 1, Capacity = 50, BasePricePerHour = 2000m, Name = "Conference Room" };
         var bookingEntity = new Booking { Id = 0, RoomId = 1, StartTime = startTime, EndTime = endTime, TotalPrice = 4000m };
         var createdBooking = new Booking { Id = 1, RoomId = 1, StartTime = startTime, EndTime = endTime, TotalPrice = 4000m };
         var expectedDto = new ResponseBookingDto(1, 1, startTime, endTime, 4000m);
 
+        _mockBookingRepo.Setup(r => r.GetOverlappingBookingsAsync(It.IsAny<int>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                        .ReturnsAsync(new List<Booking>());
+
+        _mockRoomRepo.Setup(r => r.GetByIdAsync(createDto.RoomId))
+                     .ReturnsAsync(expectedRoom);
+
+        _mockCalculator.Setup(c => c.Calculate(expectedRoom.BasePricePerHour, startTime, endTime))
+                       .Returns(4000m);
+
         _mockMapper.Setup(m => m.Map<Booking>(createDto)).Returns(bookingEntity);
-        _mockRepo.Setup(r => r.AddAsync(It.IsAny<Booking>())).ReturnsAsync(createdBooking);
+        _mockBookingRepo.Setup(r => r.AddAsync(It.IsAny<Booking>())).ReturnsAsync(createdBooking);
         _mockMapper.Setup(m => m.Map<ResponseBookingDto>(createdBooking)).Returns(expectedDto);
 
         // Act
@@ -43,7 +89,7 @@ public class BookingServiceTests
         // Assert
         Assert.NotNull(result);
         Assert.Equal(1, result.Id);
-        _mockRepo.Verify(r => r.AddAsync(It.IsAny<Booking>()), Times.Once);
+        _mockBookingRepo.Verify(r => r.AddAsync(It.IsAny<Booking>()), Times.Once);
     }
 
     [Fact]
@@ -56,7 +102,7 @@ public class BookingServiceTests
         await _bookingService.DeleteAsync(bookingId);
 
         // Assert
-        _mockRepo.Verify(r => r.DeleteAsync(bookingId), Times.Once);
+        _mockBookingRepo.Verify(r => r.DeleteAsync(bookingId), Times.Once);
     }
 
     [Fact]
@@ -70,7 +116,7 @@ public class BookingServiceTests
         var bookingEntity = new Booking { Id = bookingId, RoomId = 1, StartTime = startTime, EndTime = endTime, TotalPrice = 4000m };
         var expectedDto = new ResponseBookingDto(bookingId, 1, startTime, endTime, 4000m);
 
-        _mockRepo.Setup(r => r.GetByIdAsync(bookingId)).ReturnsAsync(bookingEntity);
+        _mockBookingRepo.Setup(r => r.GetByIdAsync(bookingId)).ReturnsAsync(bookingEntity);
         _mockMapper.Setup(m => m.Map<ResponseBookingDto>(bookingEntity)).Returns(expectedDto);
 
         // Act
@@ -86,7 +132,7 @@ public class BookingServiceTests
     {
         // Arrange
         int bookingId = 999;
-        _mockRepo.Setup(r => r.GetByIdAsync(bookingId)).ReturnsAsync((Booking?)null);
+        _mockBookingRepo.Setup(r => r.GetByIdAsync(bookingId)).ReturnsAsync((Booking?)null);
 
         // Act
         var result = await _bookingService.GetByIdAsync(bookingId);
@@ -111,7 +157,7 @@ public class BookingServiceTests
             new ResponseBookingDto(1, 1, startTime, endTime, 4000m)
         };
 
-        _mockRepo.Setup(r => r.GetAllAsync()).ReturnsAsync(bookings);
+        _mockBookingRepo.Setup(r => r.GetAllAsync()).ReturnsAsync(bookings);
         _mockMapper.Setup(m => m.Map<IEnumerable<ResponseBookingDto>>(bookings)).Returns(expectedDtos);
 
         // Act
@@ -138,7 +184,7 @@ public class BookingServiceTests
         await _bookingService.UpdateAsync(updateDto);
 
         // Assert
-        _mockRepo.Verify(r => r.UpdateAsync(bookingEntity), Times.Once);
+        _mockBookingRepo.Verify(r => r.UpdateAsync(bookingEntity), Times.Once);
     }
 
     [Fact]
@@ -159,7 +205,7 @@ public class BookingServiceTests
             new ResponseBookingDto(1, roomId, new DateTime(2026, 10, 1, 10, 0, 0), new DateTime(2026, 10, 1, 12, 0, 0), 4000m)
         };
 
-        _mockRepo.Setup(r => r.GetOverlappingBookingsAsync(roomId, queryStart, queryEnd)).ReturnsAsync(overlappingBookings);
+        _mockBookingRepo.Setup(r => r.GetOverlappingBookingsAsync(roomId, queryStart, queryEnd)).ReturnsAsync(overlappingBookings);
         _mockMapper.Setup(m => m.Map<IEnumerable<ResponseBookingDto>>(overlappingBookings)).Returns(expectedDtos);
 
         // Act
@@ -167,6 +213,6 @@ public class BookingServiceTests
 
         // Assert
         Assert.Single(result);
-        _mockRepo.Verify(r => r.GetOverlappingBookingsAsync(roomId, queryStart, queryEnd), Times.Once);
+        _mockBookingRepo.Verify(r => r.GetOverlappingBookingsAsync(roomId, queryStart, queryEnd), Times.Once);
     }
 }

@@ -8,7 +8,7 @@ namespace DataAccess.Repository;
 /// Provides the Entity Framework Core implementation for the booking repository.
 /// </summary>
 /// <param name="context">The application's database context.</param>
-internal class BookingRepository(AppDbContext context) : IBookingRepository
+public class BookingRepository(AppDbContext context) : IBookingRepository
 {
     /// <inheritdoc/>
     public async Task<Booking> AddAsync(Booking booking)

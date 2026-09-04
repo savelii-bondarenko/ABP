@@ -1,4 +1,6 @@
-﻿namespace BusinessLogic.Services;
+﻿using BusinessLogic.Interfaces;
+
+namespace BusinessLogic.Services;
 
 /// <summary>
 /// Represents a pricing rule that applies a specific multiplier to the base price during a given time period.
@@ -12,7 +14,7 @@ public record PricingRule(TimeSpan StartTime, TimeSpan EndTime, decimal Multipli
 /// Provides functionality to calculate the total price of a conference room booking 
 /// based on dynamic time-of-day pricing rules.
 /// </summary>
-public class PriceCalculatorService
+public class PriceCalculatorService : IPriceCalculatorService
 {
     private readonly List<PricingRule> _rules = new()
     {
