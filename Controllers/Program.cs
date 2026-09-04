@@ -1,6 +1,7 @@
 using BusinessLogic.Interfaces;
 using BusinessLogic.Mappings;
 using BusinessLogic.Services;
+using Controllers.Endpoints;
 using DataAccess;
 using DataAccess.Interfaces;
 using DataAccess.Repository;
@@ -29,19 +30,32 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddAutoMapper(config =>
 {
     config.AddProfile<RoomProfile>();
+    config.AddProfile<BookingProfile>();
+    config.AddProfile<AdditionalServiceProfile>();
 });
 
 builder.Services.AddOpenApi();
 
+// Repo
 builder.Services.AddScoped<IRoomRepository, RoomRepository>();
-builder.Services.AddScoped<IRoomService, RoomService>();
-builder.Services.AddScoped<IPriceCalculatorService, PriceCalculatorService>();
-builder.Services.AddScoped<IAdditionalServiceService, AdditionalServiceService>();
-
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 builder.Services.AddScoped<IAdditionalServiceRepository, AdditionalServiceRepository>();
 
-builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+// Services
+builder.Services.AddScoped<IRoomService, RoomService>();
 builder.Services.AddScoped<IBookingService, BookingService>();
+builder.Services.AddScoped<IAdditionalServiceService, AdditionalServiceService>();
+builder.Services.AddScoped<IPriceCalculatorService, PriceCalculatorService>();
+
 var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+}
+
+app.MapAdditionalServiceEndpoints();
+app.MapRoomEndpoints();
+app.MapBookingEndpoints();
 
 app.Run();
