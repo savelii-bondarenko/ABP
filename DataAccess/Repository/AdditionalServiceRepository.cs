@@ -18,6 +18,7 @@ public class AdditionalServiceRepository(AppDbContext context) : IAdditionalServ
             .ToListAsync();
     }
 
+    /// <inheritdoc/>
     public async Task<IEnumerable<AdditionalService>> GetAllAsync()
     {
         return await context.AdditionalServices.AsNoTracking().ToListAsync();

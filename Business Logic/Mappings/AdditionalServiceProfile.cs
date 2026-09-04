@@ -5,7 +5,8 @@ using DataAccess.Entities;
 namespace BusinessLogic.Mappings;
 
 /// <summary>
-/// This class was created for AutoMapper realizations. It uses Profile class for create AdditionalServiceProfile.
+/// Configures AutoMapper mappings for additional services. 
+/// Extends the AutoMapper Profile class.
 /// </summary>
 public class AdditionalServiceProfile : Profile
 {

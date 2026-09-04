@@ -14,5 +14,9 @@ public interface IAdditionalServiceRepository
     /// <returns>A collection of matching additional services.</returns>
     Task<IEnumerable<AdditionalService>> GetByIdsAsync(IEnumerable<int> ids);
 
+    /// <summary>
+    /// Retrieves all available additional services from the database.
+    /// </summary>
+    /// <returns>A collection of all additional services.</returns>
     Task<IEnumerable<AdditionalService>> GetAllAsync();
 }
