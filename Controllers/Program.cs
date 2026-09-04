@@ -1,4 +1,9 @@
+using BusinessLogic.Interfaces;
+using BusinessLogic.Mappings;
+using BusinessLogic.Services;
 using DataAccess;
+using DataAccess.Interfaces;
+using DataAccess.Repository;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
@@ -21,7 +26,15 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionStringBuilder.ConnectionString);
 });
 
+builder.Services.AddAutoMapper(config =>
+{
+    config.AddProfile<RoomProfile>();
+});
+
 builder.Services.AddOpenApi();
+
+builder.Services.AddScoped<IRoomRepository, RoomRepository>();
+builder.Services.AddScoped<IRoomService, RoomService>();
 
 var app = builder.Build();
 
