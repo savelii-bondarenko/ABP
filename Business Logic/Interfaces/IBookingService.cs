@@ -1,18 +1,18 @@
-﻿using DataAccess.Entities;
+﻿using BusinessLogic.DTOs;
 
 namespace BusinessLogic.Interfaces;
 
 public interface IBookingService
 {
-    Task<Booking> AddAsync(Booking booking);
+    Task<ResponseBookingDto> AddAsync(CreateBookingeDto createBooking);
 
     Task DeleteAsync(int id);
 
-    Task UpdateAsync(Booking booking);
+    Task UpdateAsync(UpdateBookingDto updateBooking);
 
-    Task<Booking?> GetByIdAsync(int id);
+    Task<ResponseBookingDto?> GetByIdAsync(int id);
 
-    Task<IEnumerable<Booking>> GetAllAsync();
+    Task<IEnumerable<ResponseBookingDto>> GetAllAsync();
 
-    Task<IEnumerable<Booking>> GetOverlappingBookingsAsync(int roomId, DateTime start, DateTime end);
+    Task<IEnumerable<ResponseBookingDto>> GetOverlappingBookingsAsync(int roomId, DateTime start, DateTime end);
 }
