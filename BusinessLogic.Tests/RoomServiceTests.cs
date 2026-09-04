@@ -3,6 +3,7 @@ using DataAccess.Entities;
 using DataAccess.Interfaces;
 using AutoMapper;
 using Moq;
+using BusinessLogic.Services;
 
 namespace BusinessLogic.Tests;
 
@@ -10,13 +11,13 @@ public class RoomServiceTests
 {
     private readonly Mock<IRoomRepository> _mockRepo;
     private readonly Mock<IMapper> _mockMapper;
-    private readonly Services.RoomService _roomService;
+    private readonly RoomService _roomService;
 
     public RoomServiceTests()
     {
         _mockRepo = new Mock<IRoomRepository>();
         _mockMapper = new Mock<IMapper>();
-        _roomService = new Services.RoomService(_mockRepo.Object, _mockMapper.Object);
+        _roomService = new RoomService(_mockRepo.Object, _mockMapper.Object);
     }
 
     [Fact]
@@ -131,8 +132,8 @@ public class RoomServiceTests
     public async Task GetAvailableRoomsAsync_ValidParameters_ReturnsAvailableRooms()
     {
         // Arrange
-        var startTime = new System.DateTime(2026, 10, 1, 10, 0, 0);
-        var endTime = new System.DateTime(2026, 10, 1, 12, 0, 0);
+        var startTime = new DateTime(2026, 10, 1, 10, 0, 0);
+        var endTime = new DateTime(2026, 10, 1, 12, 0, 0);
         int capacity = 20;
 
         var availableRooms = new List<Room>

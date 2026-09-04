@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace DataAccess.EntityConfigurations;
 
 /// <summary>
-/// Database scheme conf. for <see cref="RoomService"/> entity
+/// Database scheme conf. for <see cref="AdditionalService"/> entity
 /// </summary>
-internal sealed class RoomServiceConfiguration : IEntityTypeConfiguration<RoomService>
+internal sealed class RoomServiceConfiguration : IEntityTypeConfiguration<AdditionalService>
 {
     private const string MoneyType = "decimal(18,2)";
 
-    public void Configure(EntityTypeBuilder<RoomService> builder)
+    public void Configure(EntityTypeBuilder<AdditionalService> builder)
     {
         builder.HasKey(b => b.Id);
 

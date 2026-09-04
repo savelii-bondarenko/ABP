@@ -14,5 +14,5 @@ public sealed class Booking
 
     public Room Room { get; set; } = null!;
 
-    public IList<RoomService> SelectedServices { get; set; } = [];
+    public IList<AdditionalService> SelectedServices { get; set; } = [];
 }

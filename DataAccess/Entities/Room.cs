@@ -10,7 +10,7 @@ public sealed class Room
 
     public required decimal BasePricePerHour { get; set; }
 
-    public IList<RoomService> AvailableServices { get; set; } = [];
+    public IList<AdditionalService> AvailableServices { get; set; } = [];
 
     public IList<Booking> Bookings { get; set; } = [];
 }

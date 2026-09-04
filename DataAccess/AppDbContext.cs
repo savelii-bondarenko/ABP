@@ -11,7 +11,7 @@ public class AppDbContext : DbContext
 {
     public DbSet<Room> Rooms { get; set; }
     public DbSet<Booking> Bookings { get; set; }
-    public DbSet<RoomService> RoomServices { get; set; }
+    public DbSet<AdditionalService> RoomServices { get; set; }
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
