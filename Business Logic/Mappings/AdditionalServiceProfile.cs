@@ -13,5 +13,9 @@ public class AdditionalServiceProfile : Profile
     public AdditionalServiceProfile()
     {
         CreateMap<AdditionalService, AdditionalServiceDto>();
+
+        CreateMap<CreateAdditionalServiceDto, AdditionalService>();
+
+        CreateMap<UpdateAdditionalServiceDto, AdditionalService>();
     }
 }
