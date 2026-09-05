@@ -32,6 +32,7 @@ builder.Services.AddAutoMapper(config =>
     config.AddProfile<RoomProfile>();
     config.AddProfile<BookingProfile>();
     config.AddProfile<AdditionalServiceProfile>();
+    config.AddProfile<ReportProfile>();
 });
 
 builder.Services.AddOpenApi();

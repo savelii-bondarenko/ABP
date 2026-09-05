@@ -1,13 +1,22 @@
-﻿using BusinessLogic.DTOs;
+﻿using AutoMapper;
+using BusinessLogic.DTOs;
 using BusinessLogic.Interfaces;
 using DataAccess.Interfaces;
 
 namespace BusinessLogic.Services;
 
+/// <summary>
+/// Provides business logic operations for generating analytical reports.
+/// </summary>
+/// <param name="bookingRepository">The repository for accessing booking data.</param>
+/// <param name="roomRepository">The repository for accessing room data.</param>
+/// <param name="mapper">The AutoMapper instance for object mapping.</param>
 public class ReportService(
     IBookingRepository bookingRepository,
-    IRoomRepository roomRepository) : IReportService
+    IRoomRepository roomRepository,
+    IMapper mapper) : IReportService
 {
+    /// <inheritdoc/>
     public async Task<BusinessReportDto> GetRevenueReportAsync(DateTime startDate, DateTime endDate)
     {
         var allBookings = await bookingRepository.GetAllAsync();
@@ -21,12 +30,13 @@ public class ReportService(
         {
             var roomBookings = periodBookings.Where(b => b.RoomId == room.Id).ToList();
 
-            return new RoomRevenueDto(
-                room.Id,
-                room.Name,
-                roomBookings.Count,
-                roomBookings.Sum(b => b.TotalPrice)
-            );
+            var dto = mapper.Map<RoomRevenueDto>(room);
+
+            return dto with
+            {
+                TotalBookings = roomBookings.Count,
+                TotalRevenue = roomBookings.Sum(b => b.TotalPrice)
+            };
         })
         .OrderByDescending(r => r.TotalRevenue)
         .ToList();
