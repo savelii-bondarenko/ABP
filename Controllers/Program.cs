@@ -46,6 +46,7 @@ builder.Services.AddScoped<IRoomService, RoomService>();
 builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<IAdditionalServiceService, AdditionalServiceService>();
 builder.Services.AddScoped<IPriceCalculatorService, PriceCalculatorService>();
+builder.Services.AddScoped<IReportService, ReportService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -60,6 +61,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapAdditionalServiceEndpoints();
+app.MapReportEndpoints();
 app.MapRoomEndpoints();
 app.MapBookingEndpoints();
 
