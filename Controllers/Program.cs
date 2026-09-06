@@ -1,6 +1,7 @@
 using BusinessLogic.Interfaces;
 using BusinessLogic.Mappings;
 using BusinessLogic.Services;
+using Controllers.Infrastructure;
 using Controllers.Endpoints;
 using DataAccess;
 using DataAccess.Interfaces;
@@ -37,6 +38,10 @@ builder.Services.AddAutoMapper(config =>
 
 builder.Services.AddOpenApi();
 
+// erors handling
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+
 // Repo
 builder.Services.AddScoped<IRoomRepository, RoomRepository>();
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
@@ -54,6 +59,8 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+app.UseExceptionHandler();
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
@@ -62,8 +69,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapAdditionalServiceEndpoints();
+
 app.MapReportEndpoints();
+
 app.MapRoomEndpoints();
+
 app.MapBookingEndpoints();
 
 app.Run();
